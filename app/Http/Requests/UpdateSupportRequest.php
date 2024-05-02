@@ -22,15 +22,17 @@ class UpdateSupportRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'subject' => [
-                'required',
-                'string',
-                'min:5',
-                'max:255',
-                Rule::unique('supports')->ignore($this->id)
-            ],
-            'body' => ['required', 'string', 'min:5', 'max:10000'],
-        ];
+        if ($this->method() == 'PUT' || $this->method() == 'PATCH') {
+            return [
+                'subject' => [
+                    'required',
+                    'string',
+                    'min:5',
+                    'max:255',
+                    Rule::unique('supports')->ignore($this->support ?? $this->id)
+                ],
+                'body' => ['required', 'string', 'min:5', 'max:10000'],
+            ];
+        }
     }
 }
